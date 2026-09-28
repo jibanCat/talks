@@ -1,0 +1,6 @@
+{
+  "release": "lya-web-v1",
+  "asset": "lya-web-v1.tar.gz",
+  "sha256": "b67103960780915283d905dc51c12cd2d4bc2620f02d433ec67e8300db36c0d0",
+  "source": "the frozen talk, tag talk-freeze-2026-09-27, exported by deploy/export.py on branch deploy/github-pages"
+}
