@@ -1,8 +1,9 @@
 # Publishes site/ to GitHub Pages at https://jibancat.github.io/talks/
 # Manual only: Actions → Deploy → Run workflow. The job runs in the github-pages environment, so it can be held for approval.
 # Actions are pinned to full commit SHAs (tag in the comment).
-# The talk itself is not in this repository: it is a Release asset of this repository, pinned by name and sha256 in
-# lya/RELEASE.json, and unpacked into site/lya/ at deploy time. This workflow has no access to any other repository.
+# The talks themselves are not in this repository: each is a Release asset of this repository, pinned by name and sha256
+# in <talk>/RELEASE.json (with the files to expect), and unpacked at deploy time into site/<talk>/, beside the landing
+# page committed there. This workflow has no access to any other repository.
 name: Deploy
 
 on:
@@ -28,22 +29,35 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Fetch the released talk (pinned in lya/RELEASE.json)
+      - name: Fetch the released talks (each pinned in <talk>/RELEASE.json)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          release=$(jq -r .release lya/RELEASE.json)
-          asset=$(jq -r .asset lya/RELEASE.json)
-          want=$(jq -r .sha256 lya/RELEASE.json)
-          gh release download "$release" --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir "$RUNNER_TEMP"
-          echo "$want  $RUNNER_TEMP/$asset" | sha256sum --check --strict
-          # nothing may land outside site/lya/ or replace the landing page
-          if tar -tzf "$RUNNER_TEMP/$asset" | grep -qE '^/|(^|/)\.\.(/|$)|^index\.html$'; then echo "unexpected paths in $asset"; exit 1; fi
-          tar -xzf "$RUNNER_TEMP/$asset" -C site/lya --no-same-owner --no-same-permissions
-          test -f site/lya/talk/index.html
-          test -f site/lya/volume-spike/data/flux_cube_240.bin
-          test -f site/lya/talk/stills/manifest.json
+          shopt -s nullglob
+          pins=(*/RELEASE.json)
+          test ${#pins[@]} -gt 0
+          for pin in "${pins[@]}"; do
+            talk=${pin%/RELEASE.json}
+            # a talk is a plain folder name, with its landing page already in site/<talk>/
+            [[ $talk =~ ^[a-z0-9][a-z0-9-]*$ ]] || { echo "unexpected folder name: $talk"; exit 1; }
+            test -f "site/$talk/index.html"
+            release=$(jq -r .release "$pin")
+            asset=$(jq -r .asset "$pin")
+            want=$(jq -r .sha256 "$pin")
+            mkdir -p "$RUNNER_TEMP/$talk"
+            gh release download "$release" --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir "$RUNNER_TEMP/$talk"
+            echo "$want  $RUNNER_TEMP/$talk/$asset" | sha256sum --check --strict
+            # nothing may land outside site/<talk>/ or replace its landing page
+            # (the listing is read whole first: with pipefail, grep -q stopping early could hide a match)
+            paths=$(tar -tzf "$RUNNER_TEMP/$talk/$asset")
+            if grep -qE '^/|(^|/)\.\.(/|$)|^index\.html$' <<< "$paths"; then echo "unexpected paths in $asset"; exit 1; fi
+            tar -xzf "$RUNNER_TEMP/$talk/$asset" -C "site/$talk" --no-same-owner --no-same-permissions
+            jq -e '.expect | length > 0' "$pin" > /dev/null
+            for f in $(jq -r '.expect[]' "$pin"); do
+              test -f "site/$talk/$f" || { echo "missing site/$talk/$f"; exit 1; }
+            done
+          done
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

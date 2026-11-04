@@ -1,0 +1,12 @@
+{
+  "release": "leinweber-web-v1",
+  "asset": "leinweber-web-v1.tar.gz",
+  "sha256": "c072b60020a6468e3ae4dd6bef224586517d23ebe7ebd68e3f2e30b277caf8d6",
+  "source": "jibanCat/Leinweber_talk_public at tag lw10-web-v1",
+  "expect": [
+    "talk/index.html",
+    "talk/stills/lw10/manifest.json",
+    "volume-spike/data/flux_cube_240.bin",
+    "LICENSE-CONTENT.md"
+  ]
+}
