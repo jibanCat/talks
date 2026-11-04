@@ -21,6 +21,11 @@
   kbd { font: 13px/1 ui-monospace, "SF Mono", Menlo, monospace; border: 1px solid var(--hair); border-radius: 3px; padding: 2px 5px; background: var(--key); color: var(--ink); }
   footer { margin-top: 56px; font-size: 13px; line-height: 1.5; color: var(--muted); }
   footer p { margin: 0 0 10px; }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; margin: 32px 0 8px; }
+  .shots figure { margin: 0; }
+  .shots img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); border-radius: 3px; background: #0E131A; }
+  .shots figcaption { font-size: 13px; line-height: 1.4; color: var(--muted); margin-top: 6px; }
+  @media (max-width: 480px) { .shots { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -32,6 +37,12 @@
   <p>It shows how the light of distant quasars, crossing the hydrogen between galaxies, maps the Universe's expansion with DESI's standard ruler and reaches down to the smallest scales, where dark matter's properties start to show. Then it follows one quasar's light through a PRIYA cosmological simulation, cloud by cloud.</p>
   <p class="status"><a href="talk/">Start the talk →</a> · <a href="talk/?look=paper">Light version</a> <span class="small">for a weak projector</span></p>
   <p class="small"><kbd>→</kbd> or <kbd>space</kbd> next · <kbd>←</kbd> back · <kbd>F</kbd> full screen · <kbd>S</kbd> stills, for a slow machine. About 71 MB to load; best in Chrome, on a laptop or desktop with a keyboard.</p>
+  <div class="shots">
+    <figure><a href="talk/stills/lw10/fan.1.jpg"><img src="talk/stills/lw10/fan.1.jpg" width="1920" height="1080" loading="lazy" alt="A thin slice of DESI's 3D map: bright, red and star-forming galaxies near us, then quasars and the Lyman-alpha forest farther out"></a><figcaption>DESI: the largest 3D map of the Universe, with galaxies and quasars <span>· DESI DR1</span></figcaption></figure>
+    <figure><a href="talk/stills/lw10/pairs.4.jpg"><img src="talk/stills/lw10/pairs.4.jpg" width="1920" height="1080" loading="lazy" alt="Red galaxies in one patch of DESI's map with the sound horizon's ring, beside the share of galaxy pairs at each separation"></a><figcaption>Sound waves in the early Universe left a standard ruler in the map <span>· DESI DR1, pairs counted here</span></figcaption></figure>
+    <figure><a href="talk/stills/lw10/beam.5.jpg"><img src="talk/stills/lw10/beam.5.jpg" width="1920" height="1080" loading="lazy" alt="A quasar's light crossing the PRIYA simulation's gas, above the forest of absorption lines it has collected"></a><figcaption>Abundant intergalactic hydrogen forms a forest of lines <span>· PRIYA (Bird, Fernandez, Ho et al. 2023)</span></figcaption></figure>
+    <figure><a href="talk/stills/lw10/beam.6.jpg"><img src="talk/stills/lw10/beam.6.jpg" width="1920" height="1080" loading="lazy" alt="Zoomed in where the light passes a galaxy in the simulation, above the spectrum it has collected"></a><figcaption>This forest is called: the Lyman alpha forest <span>· PRIYA (Bird, Fernandez, Ho et al. 2023)</span></figcaption></figure>
+  </div>
   <footer>
     <p>Data: DESI Data Release 1 (DESI Collaboration et al. 2026, AJ 171, 285; CC BY 4.0), selected and processed for the slides; DESI DR2 Results I and II (DESI Collaboration 2025, Phys. Rev. D 112, 083514 and 083515). Simulation: PRIYA, led by Simeon Bird (Bird, Fernandez, Ho et al. 2023, JCAP 10 (2023) 037; Fernandez, Bird &amp; Ho 2024, JCAP 07 (2024) 029).</p>
     <p>Code: MIT licence. Slides, pictures and films made for the talk: CC BY 4.0. Pictures of DESI's data show DESI's work, and this talk claims no credit for it: if you use one, cite DESI's original papers, not this talk. Any image of the PRIYA simulation must cite the PRIYA simulation paper, Bird, Fernandez, Ho et al. 2023. Full credits and licences: <a href="README.md">README</a>, <a href="LICENSE-CONTENT.md">LICENSE-CONTENT</a> and <a href="LICENSE">LICENSE</a>. Source: <a href="https://github.com/jibanCat/Leinweber_talk_public">jibanCat/Leinweber_talk_public</a>.</p>
